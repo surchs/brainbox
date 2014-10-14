@@ -55,3 +55,4 @@ target/
 
 # PyCharm addition
 *.xml
+*.iml
