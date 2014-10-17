@@ -3,27 +3,26 @@ import sys
 import time
 import numpy as np
 import nibabel as nib
+from .. import tools as to
 
 
 def read_files(file_dict, network):
     array_dict = {}
-    drop = 0
     num_files = len(file_dict['sub_name'])
     print('I found {} files to load.'.format(num_files))
-    t_time = np.array([])
+    t_time = np.array([0])
+    count = to.Counter(num_files)
     for idx, sub in enumerate(file_dict['sub_name']):
         # Progress
-        start = time.time()
-        p_complete = np.round(float(idx + 1) / num_files * 100, 1)
-        remaining = num_files - (idx + 1)
-
+        count.tic()
         sub_dir = file_dict['dir'][idx]
         sub_path = file_dict['path'][idx]
         try:
             tmp_data = nib.load(sub_path).get_data()
         except:
-            drop += 1
             continue
+            count.toc()
+            count.progress()
         if len(tmp_data.shape) > 3:
             tmp_net = tmp_data[..., network]
         else:
@@ -31,20 +30,25 @@ def read_files(file_dict, network):
         tmp_flat = np.ndarray.flatten(tmp_net)
         # See if the metric has been stored yet
         if not sub_dir in array_dict.keys():
-            array_dict[sub_dir] = tmp_flat[:, None]
-        else:
-            array_dict[sub_dir] = np.concatenate((array_dict[sub_dir],
-                                                  tmp_flat[:, None]), axis=1)
+            # Find expected number of subjects
+            matches = len([s for s in file_dict['sub_name'] if sub_dir in s])
+            # Get size of current subject
+            sub_size = tmp_flat.shape
+            arr_size = (matches,) + sub_size
+            # Preallocate array
+            array_dict[sub_dir] = [np.empty(arr_size), 0]
+        array_dict[sub_dir][0][array_dict[sub_dir][1], ...] = tmp_flat
+        array_dict[sub_dir][1] += 1
 
         # Report on time
-        stop = time.time()
-        took = stop - start
-        t_time = np.append(t_time, took)
-        avg_took = np.average(t_time)
-        rem_time = np.round((avg_took * remaining), 2)
-        # Progress callout
-        sys.stdout.write('\r{1} % done {2} seconds to go'.format(p_complete,
-                                                                 rem_time))
-        sys.stdout.flush()
+        count.toc()
+        count.progress()
 
-    print('I had to drop {} files.'.format(drop))
+    # Clean up the arrays - there may be some subjects that did not load etc
+    for sub in array_dict.keys():
+        tmp_a = array_dict[sub][0]
+        tmp_b = array_dict[sub][1]
+        array_dict[sub] = tmp_a[:tmp_b, ...]
+
+    print('\nWe are done')
+    return array_dict
