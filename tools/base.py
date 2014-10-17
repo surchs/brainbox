@@ -1,7 +1,6 @@
 __author__ = 'surchs'
 import sys
 import time
-import numpy as np
 
 
 class Counter(object):
@@ -35,8 +34,8 @@ class Counter(object):
             sys.stdout.write('\r {0:.2f} seconds to go.'.format(rem_time))
         else:
             remaining = self.total - self.count
-            p_complete =float(self.count) / self.total * 100
-            rem_time = np.round((self.avg * remaining), 2)
+            p_complete = float(self.count) / self.total * 100
+            rem_time = self.avg * remaining
 
         sys.stdout.write('\r {0:.1f} % done {1:.2f} seconds to go.'.format(p_complete,
                                                                    rem_time))
