@@ -4,6 +4,9 @@ import time
 
 
 class Counter(object):
+    """
+    Counter Class
+    """
     def __init__(self, total=None):
         self.count = 0
         self.total = total

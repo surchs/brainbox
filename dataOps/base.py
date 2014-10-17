@@ -7,6 +7,12 @@ from .. import tools as to
 
 
 def read_files(file_dict, network):
+    """
+
+    :param file_dict:
+    :param network:
+    :return:
+    """
     array_dict = {}
     num_files = len(file_dict['sub_name'])
     print('I found {} files to load.'.format(num_files))
