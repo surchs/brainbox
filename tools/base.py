@@ -1,6 +1,7 @@
 __author__ = 'surchs'
 import sys
 import time
+import numpy as np
 
 
 class Counter(object):

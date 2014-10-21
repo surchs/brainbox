@@ -6,12 +6,14 @@ import nibabel as nib
 from .. import tools as to
 
 
-def read_files(file_dict, network):
+def read_files(file_dict):
     """
-
-    :param file_dict:
-    :param network:
-    :return:
+    :param file_dict: the input dictionary. Should be generated with
+                      brainbox.fileOps.grab_files.
+    :return: a dictionary with an entry for each subdirectory that was supplied
+             in the file_dict. Each entry contains an 4D array with the networks
+             ordered in the 4th dimension. If the file read in is 3D, the 4th
+             dimension will only have one entry
     """
     array_dict = {}
     num_files = len(file_dict['sub_name'])
@@ -30,9 +32,9 @@ def read_files(file_dict, network):
             count.toc()
             count.progress()
         if len(tmp_data.shape) > 3:
-            tmp_net = tmp_data[..., network]
-        else:
             tmp_net = tmp_data
+        else:
+            tmp_net = tmp_data[..., None]
         tmp_flat = np.ndarray.flatten(tmp_net)
         # See if the metric has been stored yet
         if not sub_dir in array_dict.keys():
