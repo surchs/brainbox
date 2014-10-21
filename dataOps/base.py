@@ -32,10 +32,11 @@ def read_files(file_dict):
             count.toc()
             count.progress()
         if len(tmp_data.shape) > 3:
-            tmp_net = tmp_data
+            n4 = tmp_data.shape[3]
+            n3 = tmp_data.shape[:3]
+            tmp_flat = np.reshape(tmp_data, (np.prod(n3), n4))
         else:
-            tmp_net = tmp_data[..., None]
-        tmp_flat = np.ndarray.flatten(tmp_net)
+            tmp_flat = np.ndarray.flatten(tmp_data)[..., None]
         # See if the metric has been stored yet
         if not sub_dir in array_dict.keys():
             # Find expected number of subjects
