@@ -13,7 +13,6 @@ def calc_link(data, network, method='euclidean', metric=None):
     :param metric: the imaging metric in the dictionary that is desired
     :return: distance and linkage variables
     """
-
     distance = dist.squareform(dist.pdist(data[metric][..., network], method))
     linkage = clh.linkage(distance, method='ward')
 
