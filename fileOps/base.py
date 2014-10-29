@@ -5,6 +5,13 @@ import glob
 
 
 def grab_files(path, ext, sub=None):
+    """
+    This function pull a couple of files in and also looks in subdirectories
+    :param path:
+    :param ext:
+    :param sub:
+    :return:
+    """
     # See if there are any subdirectories
     sub_dirs = [d for d in os.walk(path).next()[1]]
     tmp = ext.strip('*')

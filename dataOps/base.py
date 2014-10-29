@@ -1,9 +1,9 @@
 __author__ = 'surchs'
-import sys
-import time
 import numpy as np
 import nibabel as nib
 from .. import tools as to
+import scipy.spatial.distance as dist
+import scipy.cluster.hierarchy as clh
 
 
 def read_files(file_dict):
@@ -18,7 +18,6 @@ def read_files(file_dict):
     array_dict = {}
     num_files = len(file_dict['sub_name'])
     print('I found {} files to load.'.format(num_files))
-    t_time = np.array([0])
     count = to.Counter(num_files)
     for idx, sub in enumerate(file_dict['sub_name']):
         # Progress
@@ -28,9 +27,9 @@ def read_files(file_dict):
         try:
             tmp_data = nib.load(sub_path).get_data()
         except:
-            continue
             count.toc()
             count.progress()
+            continue
         if len(tmp_data.shape) > 3:
             n4 = tmp_data.shape[3]
             n3 = tmp_data.shape[:3]
@@ -61,3 +60,20 @@ def read_files(file_dict):
 
     print('\nWe are done')
     return array_dict
+
+
+def calc_link(data, network, method='euclidean', metric=None):
+    """
+    Computes the linkage on the data supplied. Uses hierarchical clustering with
+    wards criterion
+    :param data: The input dictionary (need to find out orientation of the data)
+    :param network: (zero-based) index of the desired network
+    :param method: the distance method of the scipy spatial distance toolbox
+    :param metric: the imaging metric in the dictionary that is desired
+    :return: distance and linkage variables
+    """
+
+    distance = dist.squareform(dist.pdist(data[metric][..., network], method))
+    linkage = clh.linkage(distance, method='ward')
+
+    return distance, linkage
