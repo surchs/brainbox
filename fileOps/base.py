@@ -59,7 +59,7 @@ def grab_files(path, ext, sub=None):
     return out_dict
 
 
-def read_files(file_dict):
+def read_files(file_dict, network=None):
     """
     :param file_dict: the input dictionary. Should be generated with
                       brainbox.fileOps.grab_files.
@@ -87,8 +87,20 @@ def read_files(file_dict):
             n4 = tmp_data.shape[3]
             n3 = tmp_data.shape[:3]
             tmp_flat = np.reshape(tmp_data, (np.prod(n3), n4))
+            if network:
+                # Get the network out of it
+                if network < n4:
+                    tmp_flat = tmp_flat[:, network]
+                else:
+                    raise Exception('You requested network {} but the file '
+                                    'only has {} networks'.format(network, n4))
         else:
+            if network:
+                print('You requested network {} but this file '
+                      'only has 1 network and I will ignore the '
+                      'request')
             tmp_flat = np.ndarray.flatten(tmp_data)[..., None]
+
         # See if the metric has been stored yet
         if not sub_dir in array_dict.keys():
             # Find expected number of subjects
