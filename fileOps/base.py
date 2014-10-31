@@ -90,7 +90,7 @@ def read_files(file_dict, network=None):
             if network:
                 # Get the network out of it
                 if network < n4:
-                    tmp_flat = tmp_flat[..., network]
+                    tmp_flat = tmp_flat[..., network, None]
                 else:
                     raise Exception('You requested network {} but the file '
                                     'only has {} networks'.format(network, n4))
