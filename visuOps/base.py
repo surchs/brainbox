@@ -39,7 +39,8 @@ def add_four_grid(ax, dist=0.05, ticks=False, border=False, titles=None):
                 3) bottom right
     """
     # See if titles are provided for all subplots
-    if len(titles) == 4:
+
+    if titles and len(titles) == 4:
         title = True
     else:
         title = False
