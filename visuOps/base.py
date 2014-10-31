@@ -74,7 +74,7 @@ def add_four_grid(ax, dist=0.05, ticks=False, border=False, titles=None):
         lb.spines["bottom"].set_visible(False)
 
     # Make right top plot
-    rt = add_subplot_axes(ax, [0.5+dist/2, 0,
+    rt = add_subplot_axes(ax, [0.5+dist/2, 0.5+dist/2,
                                0.5-dist/(2-title), 0.5-dist/(2-title)])
     if title:
         rt.set_title(titles[0])
@@ -88,7 +88,7 @@ def add_four_grid(ax, dist=0.05, ticks=False, border=False, titles=None):
         rt.spines["bottom"].set_visible(False)
 
     # Make right bottom plot
-    rb = add_subplot_axes(ax, [0.5+dist/2, 0.5+dist/2,
+    rb = add_subplot_axes(ax, [0.5+dist/2, 0,
                                0.5-dist/(2-title), 0.5-dist/(2-title)])
     if title:
         rb.set_title(titles[0])
