@@ -77,7 +77,7 @@ def add_four_grid(ax, dist=0.05, ticks=False, border=False, titles=None):
     rt = add_subplot_axes(ax, [0.5+dist/2, 0.5+dist/2,
                                0.5-dist/(2-title), 0.5-dist/(2-title)])
     if title:
-        rt.set_title(titles[0])
+        rt.set_title(titles[2])
     if not border:
         rt.set_xticks([])
         rt.set_yticks([])
@@ -91,7 +91,7 @@ def add_four_grid(ax, dist=0.05, ticks=False, border=False, titles=None):
     rb = add_subplot_axes(ax, [0.5+dist/2, 0,
                                0.5-dist/(2-title), 0.5-dist/(2-title)])
     if title:
-        rb.set_title(titles[0])
+        rb.set_title(titles[3])
     if not ticks:
         rb.set_xticks([])
         rb.set_yticks([])
