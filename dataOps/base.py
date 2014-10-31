@@ -3,7 +3,7 @@ import scipy.spatial.distance as dist
 import scipy.cluster.hierarchy as clh
 
 
-def calc_link(data, network, method='euclidean', metric=None):
+def calc_link(data, network, metric, method='euclidean'):
     """
     Computes the linkage on the data supplied. Uses hierarchical clustering with
     wards criterion
