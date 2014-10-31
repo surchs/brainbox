@@ -90,15 +90,14 @@ def read_files(file_dict, network=None):
             if network:
                 # Get the network out of it
                 if network < n4:
-                    tmp_flat = tmp_flat[:, network]
+                    tmp_flat = tmp_flat[..., network]
                 else:
                     raise Exception('You requested network {} but the file '
                                     'only has {} networks'.format(network, n4))
         else:
             if network:
-                print('You requested network {} but this file '
-                      'only has 1 network and I will ignore the '
-                      'request')
+                print('You requested network {} but this is a 3D file that '
+                      'only has 1 network and I will ignore the request')
             tmp_flat = np.ndarray.flatten(tmp_data)[..., None]
 
         # See if the metric has been stored yet
