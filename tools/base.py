@@ -44,3 +44,8 @@ class Counter(object):
         sys.stdout.write('\r {0:.1f} % done {1:.2f} seconds to go.'.format(p_complete,
                                                                    rem_time))
         sys.stdout.flush()
+
+    def total(self):
+        self.cur_toc = time.time()
+        self.total = self.cur_toc - self.start
+        print('This took a total of {0:.2f} seconds'.format(self.total))
