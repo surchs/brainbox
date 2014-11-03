@@ -59,7 +59,7 @@ def grab_files(path, ext, sub=None):
     return out_dict
 
 
-def read_files(file_dict, network=None):
+def read_files(file_dict, network=None, silence=False):
     """
     :param file_dict: the input dictionary. Should be generated with
                       brainbox.fileOps.grab_files.
@@ -70,7 +70,8 @@ def read_files(file_dict, network=None):
     """
     array_dict = {}
     num_files = len(file_dict['sub_name'])
-    print('I found {} files to load.'.format(num_files))
+    if silence:
+        print('I found {} files to load.'.format(num_files))
     count = to.Counter(num_files)
     for idx, sub in enumerate(file_dict['sub_name']):
         # Progress
@@ -114,7 +115,8 @@ def read_files(file_dict, network=None):
 
         # Report on time
         count.toc()
-        count.progress()
+        if silence:
+            count.progress()
 
     # Clean up the arrays - there may be some subjects that did not load etc
     for sub in array_dict.keys():
