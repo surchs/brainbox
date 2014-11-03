@@ -1,13 +1,14 @@
 __author__ = 'Sebastian Urchs'
 # Imports
 import os
+import re
 import glob
 import numpy as np
 import nibabel as nib
 from .. import tools as to
 
 
-def grab_files(path, ext, sub=None):
+def grab_files(path, ext, sub=None, duplicates=True, match=None):
     """
     This function pull a couple of files in and also looks in subdirectories
     :param path:
@@ -55,6 +56,17 @@ def grab_files(path, ext, sub=None):
             out_dict['sub_name'].append(sub_name)
             out_dict['dir'].append(path)
             out_dict['path'].append(in_file)
+
+    if duplicates:
+        # We have to go looking for duplicates in the 'sub_name' category
+        data_subs = np.array([int(re.search(r'(?<=\d{2})\d{5}', sub_id).group()) for sub_id in out_dict['sub_name']])
+        if match:
+            # We have a template that we should use instead of the full name to
+            # find duplicates
+            data_subs = np.array([int(re.search(match, sub_id).group()) for sub_id in out_dict['sub_name']])
+
+        else:
+            pass
 
     return out_dict
 
