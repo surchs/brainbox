@@ -30,7 +30,22 @@ class Counter(object):
         self.avg = np.average(self.times)
         self.all = self.cur_toc - self.start
 
-    def progress(self, remaining=None):
+    def progress(self, remaining=None, stepper=None):
+        """
+        :param remaining:
+        :param stepper: if this is something, then don't print a report every
+                        time but only on multiples of stepper
+        :return:
+        """
+        if stepper:
+            if self.count % stepper == 0:
+                self.make_progress(remaining)
+            else:
+                pass
+        else:
+            self.make_progress(remaining)
+
+    def make_progress(self, remaining=None):
         if not remaining and not self.total:
             sys.stdout.write('\r {0} done, avg {1:.2f} '
                              'seconds.'.format(self.count,
