@@ -86,7 +86,7 @@ def read_maps(file_dict, network=None, silence=False):
     """
     array_dict = {}
     num_files = len(file_dict['sub_name'])
-    if silence:
+    if not silence:
         print('I found {} files to load.'.format(num_files))
     count = to.Counter(num_files)
     for idx, sub in enumerate(file_dict['sub_name']):
@@ -131,7 +131,7 @@ def read_maps(file_dict, network=None, silence=False):
 
         # Report on time
         count.toc()
-        if silence:
+        if not silence:
             count.progress()
 
     # Clean up the arrays - there may be some subjects that did not load etc
