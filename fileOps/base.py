@@ -71,8 +71,12 @@ def grab_files(path, ext, sub=None, duplicates=True, match=None):
     return out_dict
 
 
-def read_files(file_dict, network=None, silence=False):
+def read_maps(file_dict, network=None, silence=False):
     """
+    This thing is good for reading maps of things. Like stability maps or
+    connectivity maps or other maps. Don't try reading in timeseries, it doesn't
+    like that
+
     :param file_dict: the input dictionary. Should be generated with
                       brainbox.fileOps.grab_files.
     :return: a dictionary with an entry for each subdirectory that was supplied
