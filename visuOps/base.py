@@ -1,4 +1,5 @@
 __author__ = 'surchs'
+import numpy as np
 from matplotlib import pyplot as plt
 
 
@@ -102,3 +103,37 @@ def add_four_grid(ax, dist=0.05, ticks=False, border=False, titles=None):
         rb.spines["bottom"].set_visible(False)
 
     return lt, lb, rt, rb
+
+
+def make_montage(vol, axis='coronal', x_step=5, y_step=6):
+    """
+    Makes a montage of a 3D volume
+    """
+    n_steps = x_step * y_step
+    
+    if axis == 'coronal':
+        it_dim = vol.shape[1]
+        x_dim = vol.shape[0]
+        y_dim = vol.shape[2]
+        
+    elif axis == 'axial':
+        it_dim = vol.shape[0]
+        x_dim = vol.shape[1]
+        y_dim = vol.shape[2]
+
+    vis_mat = np.zeros((x_step*x_dim, y_step*y_dim))
+    it_slc = np.linspace(0, it_dim-1, n_steps)
+    
+    itc = 0
+    for y in np.arange(y_step):
+        for x in np.arange(x_step):
+            slc_ind = it_slc[itc]
+            get_slc = np.floor(slc_ind)
+            if axis == 'coronal':
+                slc = test[:, get_slc, :]
+            elif axis == 'axial':
+                slc = test[get_slc, ...]
+            vis_mat[x_dim * x : x_dim * (x + 1), y_dim * y : y_dim * (y + 1)] = slc
+            itc += 1
+    out_mat = np.fliplr(np.rot90(vis_mat))
+    return out_mat
