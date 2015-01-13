@@ -3,6 +3,7 @@ __author__ = 'Sebastian Urchs'
 import os
 import re
 import glob
+import copy
 import numpy as np
 import nibabel as nib
 from .. import tools as to
