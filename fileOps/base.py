@@ -83,7 +83,7 @@ def drop_duplicates(in_dict):
     path = cp_dict['path']
     drop = list()
     present = list()
-    sub_names = np.array([int64(re.search(r'(?<=\d{2})\d{5}', sub_id).group()) for sub_id in cp_dict['sub_name']])
+    sub_names = np.array([int(re.search(r'(?<=\d{2})\d{5}', sub_id).group()) for sub_id in cp_dict['sub_name']])
     for idx, sub in enumerate(sub_names):
         if not sub in present:
             present.append(sub)
