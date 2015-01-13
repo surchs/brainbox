@@ -71,6 +71,33 @@ def grab_files(path, ext, sub=None, duplicates=True, match=None):
     return out_dict
 
 
+def drop_duplicates(in_dict):
+    """
+    Because python uses pointers and does not copy the variables
+    I can operate directly on the dictionary and change it in place
+    """
+    cp_dict = copy.deepcopy(in_dict)
+    subs = cp_dict['sub_name']
+    dirs = cp_dict['dir']
+    path = cp_dict['path']
+    drop = list()
+    present = list()
+    sub_names = np.array([int64(re.search(r'(?<=\d{2})\d{5}', sub_id).group()) for sub_id in cp_dict['sub_name']])
+    for idx, sub in enumerate(sub_names):
+        if not sub in present:
+            present.append(sub)
+        else:
+            drop.append(idx)
+    print('Found {} items to drop'.format(len(drop)))
+    # Pop them in reverse order
+    for idx in drop[::-1]:
+        subs.pop(idx)
+        dirs.pop(idx)
+        path.pop(idx)
+    
+    return cp_dict
+
+
 def read_maps(file_dict, network=None, silence=False):
     """
     This thing is good for reading maps of things. Like stability maps or
@@ -142,3 +169,5 @@ def read_maps(file_dict, network=None, silence=False):
 
     print('\nWe are done')
     return array_dict
+
+
