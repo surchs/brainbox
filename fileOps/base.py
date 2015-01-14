@@ -7,6 +7,7 @@ import copy
 import numpy as np
 import nibabel as nib
 from .. import tools as to
+from  __builtin__ import any as b_any
 
 
 def grab_files(path, ext, sub=None, duplicates=True, match=None):
@@ -172,3 +173,63 @@ def read_maps(file_dict, network=None, silence=False):
     return array_dict
 
 
+def find_files(in_path, ext, targets, sub=False):
+    """
+    Finds matching files with extension ext and returns them in
+    the order of the targets list given as argument
+    Returns a dictionary identical to what I was using before
+    Also drops duplicates
+    """
+    # Go through each directory and see if I can find the subjects I am looking for
+    ext = '*{}'.format(ext)
+    out_dict = {key: [] for key in ['sub_name', 'dir', 'path']}
+   
+    if not sub:
+        sub_dirs = [d for d in os.walk(in_path).next()[1]]
+
+        for sub_dir in sub_dirs:
+            tmp_dir = os.path.join(in_path, sub_dir)
+            in_files = glob.glob(os.path.join(tmp_dir, ext))
+            tmp_dict = dict()
+
+            # Get the files that we have
+            matches = [x for x in targets if b_any(str(x) in t for t in in_files)]
+
+            for in_file in in_files:
+                sub_name = os.path.basename(in_file.split('.')[0])
+                sub_id = int(re.search(r'(?<=\d{2})\d{5}', sub_name).group())            
+                if sub_id in tmp_dict.keys():
+                    # This is a duplicate
+                    continue
+                tmp_dict[sub_id] = (sub_name, in_file)
+
+            # Re-sort the path info
+            sort_list = list()
+            for target in matches:
+                sub_name, in_file = tmp_dict[target]
+                out_dict['sub_name'].append(sub_name)
+                out_dict['dir'].append(sub_dir)
+                out_dict['path'].append(in_file)
+    else:
+        sub_dir = sub
+        tmp_dir = os.path.join(in_path, sub_dir)
+        in_files = glob.glob(os.path.join(tmp_dir, ext))
+        tmp_dict = dict()
+
+        # Get the files that we have
+        matches = [x for x in targets if b_any(str(x) in t for t in in_files)]
+
+        for in_file in in_files:
+            sub_name = os.path.basename(in_file.split('.')[0])
+            sub_id = int(re.search(r'(?<=\d{2})\d{5}', sub_name).group())            
+            if sub_id in tmp_dict.keys():
+                # This is a duplicate
+                continue
+            tmp_dict[sub_id] = (sub_name, in_file)
+
+        for target in matches:
+            sub_name, in_file = tmp_dict[target]
+            out_dict['sub_name'].append(sub_name)
+            out_dict['dir'].append(sub_dir)
+            out_dict['path'].append(in_file)
+    return out_dict
