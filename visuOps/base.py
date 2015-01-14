@@ -130,9 +130,9 @@ def make_montage(vol, axis='coronal', x_step=5, y_step=6):
             slc_ind = it_slc[itc]
             get_slc = np.floor(slc_ind)
             if axis == 'coronal':
-                slc = test[:, get_slc, :]
+                slc = vol[:, get_slc, :]
             elif axis == 'axial':
-                slc = test[get_slc, ...]
+                slc = vol[get_slc, ...]
             vis_mat[x_dim * x : x_dim * (x + 1), y_dim * y : y_dim * (y + 1)] = slc
             itc += 1
     out_mat = np.fliplr(np.rot90(vis_mat))
