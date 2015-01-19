@@ -1,4 +1,5 @@
 __author__ = 'surchs'
+import sys
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
