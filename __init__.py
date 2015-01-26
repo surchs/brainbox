@@ -1,5 +1,5 @@
 __author__ = 'surchs'
-import fileOps
-import dataOps
+import load
+import data
 import tools
-import visuOps
+import visu
