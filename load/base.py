@@ -173,14 +173,15 @@ def read_maps(file_dict, network=None, silence=False):
     return array_dict
 
 
-def find_files(in_path, ext, targets, sub=False):
+def find_files(in_path, ext, targets, template='(?<=\d{2})\d{5}', sub=False):
     """
     Finds matching files with extension ext and returns them in
     the order of the targets list given as argument
     Returns a dictionary identical to what I was using before
     Also drops duplicates
     """
-    # Go through each directory and see if I can find the subjects I am looking for
+    # Go through each directory and see if I can find the subjects I am looking
+    # for
     ext = '*{}'.format(ext)
     out_dict = {key: [] for key in ['sub_name', 'dir', 'path']}
    
@@ -197,7 +198,7 @@ def find_files(in_path, ext, targets, sub=False):
 
             for in_file in in_files:
                 sub_name = os.path.basename(in_file.split('.')[0])
-                sub_id = int(re.search(r'(?<=\d{2})\d{5}', sub_name).group())            
+                sub_id = int(re.search(r'{}'.format(template), sub_name).group())
                 if sub_id in tmp_dict.keys():
                     # This is a duplicate
                     continue
@@ -221,7 +222,7 @@ def find_files(in_path, ext, targets, sub=False):
 
         for in_file in in_files:
             sub_name = os.path.basename(in_file.split('.')[0])
-            sub_id = int(re.search(r'(?<=\d{2})\d{5}', sub_name).group())            
+            sub_id = int(re.search(r'{}'.format(template), sub_name).group())
             if sub_id in tmp_dict.keys():
                 # This is a duplicate
                 continue
