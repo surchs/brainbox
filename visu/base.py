@@ -4,6 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib import colors as mpc
 
+
 def add_subplot_axes(ax, rect, axisbg='w'):
     fig = plt.gcf()
     box = ax.get_position()
@@ -153,7 +154,7 @@ def make_cmap(colors, position=None, bit=False):
     import matplotlib as mpl
     import numpy as np
     bit_rgb = np.linspace(0,1,256)
-    if position == None:
+    if position:
         position = np.linspace(0,1,len(colors))
     else:
         if len(position) != len(colors):
