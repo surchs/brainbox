@@ -2,8 +2,7 @@ __author__ = 'surchs'
 import sys
 import numpy as np
 from matplotlib import pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
-
+from matplotlib import colors as mpc
 
 def add_subplot_axes(ax, rect, axisbg='w'):
     fig = plt.gcf()
@@ -172,5 +171,32 @@ def make_cmap(colors, position=None, bit=False):
         cdict['green'].append((pos, color[1], color[1]))
         cdict['blue'].append((pos, color[2], color[2]))
 
-    cmap = mpl.colors.LinearSegmentedColormap('my_colormap',cdict,256)
+    cmap = mpc.LinearSegmentedColormap('my_colormap',cdict,256)
     return cmap
+
+
+def hot_cold():
+    """
+    This generates a niak-like colormap of hot cold
+    :return:
+    """
+    # Define a new colormap
+    cdict = {'red':   ((0.0, 0.0, 0.0),
+                       (0.5, 0.0, 0.0),
+                       (0.75, 1.0, 1.0),
+                       (1.0, 1.0, 1.0)),
+
+             'green': ((0.0, 1.0, 1.0),
+                       (0.25, 0.0, 0.0),
+                       (0.5, 0.0, 0.0),
+                       (0.75, 0.0, 0.0),
+                       (1.0, 1.0, 1.0)),
+
+             'blue':  ((0.0, 1.0, 1.0),
+                       (0.25, 1.0, 1.0),
+                       (0.5, 0.0, 0.0),
+                       (1.0, 0.0, 0.0))
+            }
+    hotcold = mpc.LinearSegmentedColormap('hotcold', cdict)
+
+    return hotcold
