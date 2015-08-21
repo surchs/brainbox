@@ -134,14 +134,14 @@ def make_montage(vol, axis='coronal', x_step=5, y_step=6):
                 slc = vol[:, get_slc, :]
             elif axis == 'axial':
                 slc = vol[get_slc, ...]
-            vis_mat[x_dim * x : x_dim * (x + 1), y_dim * y : y_dim * (y + 1)] = slc
+            vis_mat[x_dim * x:x_dim * (x + 1), y_dim * y:y_dim * (y + 1)] = slc
             itc += 1
     out_mat = np.fliplr(np.rot90(vis_mat))
     return out_mat
 
 
 def make_cmap(colors, position=None, bit=False):
-    '''
+    """
     make_cmap takes a list of tuples which contain RGB values. The RGB
     values may either be in 8-bit [0 to 255] (in which bit must be set to
     True when called) or arithmetic [0 to 1] (default). make_cmap returns
@@ -149,7 +149,7 @@ def make_cmap(colors, position=None, bit=False):
     Arrange your tuples so that the first color is the lowest value for the
     colorbar and the last is the highest.
     position contains values from 0 to 1 to dictate the location of each color.
-    '''
+    """
     import matplotlib as mpl
     import numpy as np
     bit_rgb = np.linspace(0,1,256)
