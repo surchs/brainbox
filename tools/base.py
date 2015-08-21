@@ -37,6 +37,9 @@ class Counter(object):
                         time but only on multiples of stepper
         :return:
         """
+        if self.total and not remaining:
+            remaining = self.total - self.count
+
         if stepper:
             if self.count % stepper == 0:
                 self.make_progress(remaining)
