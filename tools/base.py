@@ -8,6 +8,7 @@ class Counter(object):
     """
     Counter Class
     """
+
     def __init__(self, total=None):
         self.count = 0
         self.total = total
@@ -66,12 +67,12 @@ class Counter(object):
             p_complete = float(self.count) / self.total * 100
             rem_time = self.avg * remaining
 
-        sys.stdout.write('\r {0:.1f} % done {1:.2f} seconds to go. '
-                         'One step takes {2:.5f} '
-                         'and we ran for {3:.2f} so far'.format(p_complete,
-                                                                rem_time,
-                                                                self.avg,
-                                                                self.all))
+            sys.stdout.write('\r {0:.1f} % done {1:.2f} seconds to go. '
+                             'One step takes {2:.5f} '
+                             'and we ran for {3:.2f} s so far'.format(p_complete,
+                                                                      rem_time,
+                                                                      self.avg,
+                                                                      self.all))
         sys.stdout.flush()
 
     def total(self):
