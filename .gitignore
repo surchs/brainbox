@@ -54,5 +54,4 @@ docs/_build/
 target/
 
 # PyCharm addition
-*.xml
-*.iml
+.idea/
