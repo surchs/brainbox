@@ -1,6 +1,8 @@
 __author__ = 'surchs'
 import sys
 import numpy as np
+from matplotlib import gridspec
+from nilearn import plotting as nlp
 from matplotlib import pyplot as plt
 from matplotlib import colors as mpc
 
@@ -139,6 +141,51 @@ def make_montage(vol, axis='coronal', x_step=5, y_step=6):
             itc += 1
     out_mat = np.fliplr(np.rot90(vis_mat))
     return out_mat
+
+
+def montage(img, thr=0, axis='coronal', x_step=5, y_step=6, fsz=(10, 20)):
+    """
+    Make a montage using nilearn for the background
+    The output figure will be 5 slices wide and 6
+    slices deep
+
+    This should deprecate the older function make_montage
+    """
+    # Hardwired view range
+    sag_rng = [-65, 65]
+    cor_rng = [-100, 65]
+    axi_rng = [-71, 85]
+
+    # Get the number of slices
+    n_slices = x_step * y_step
+
+    if axis == 'coronal':
+        # Get the slice indices
+        view_range = np.floor(np.linspace(cor_rng[0], cor_rng[1], n_slices))
+        view_mode = 'y'
+    if axis == 'axial':
+        # Get the slice indices
+        view_range = np.floor(np.linspace(axi_rng[0], axi_rng[1], n_slices))
+        view_mode = 'z'
+    if axis == 'saggital':
+        # Get the slice indices
+        view_range = np.floor(np.linspace(sag_rng[0], sag_rng[1], n_slices))
+        view_mode = 'x'
+
+    # Prepare the figure
+    fig = plt.figure(figsize=fsz)
+    gs = gridspec.GridSpec(y_step, 1, hspace=0, wspace=0)
+    # Loop through the rows of the image
+    for row_id in range(y_step):
+        # Create the axis to show
+        ax = fig.add_subplot(gs[row_id, 0])
+        # Get the slices in the column direction
+        row_range = view_range[row_id*x_step:(row_id+1)*x_step]
+        # Display the thing
+        nlp.plot_stat_map(img, cut_coords=row_range,
+                          display_mode=view_mode, threshold=thr,
+                         axes=ax, black_bg=True)
+    return fig
 
 
 def make_cmap(colors, position=None, bit=False):
