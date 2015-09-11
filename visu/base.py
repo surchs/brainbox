@@ -143,24 +143,7 @@ def make_montage(vol, axis='coronal', x_step=5, y_step=6):
     return out_mat
 
 
-def montage(img, ax, thr=0, mode='coronal', view_range=[-10, 5, 0, 5, 10]):
-    """
-    Put the montage into a subplot
-    :param img: nilearn image containing the data
-    :param ax: axis handle where the image goes
-    :param thr: threshold for the image
-    :param mode: view mode. saggital, coronal, axial
-    :param view_range: list or array of slice positions
-    :return ax: axis handle
-    """
-    nlp.plot_stat_map(img, cut_coords=view_range,
-                      display_mode=mode, threshold=thr,
-                      axes=ax, black_bg=True)
-
-    return ax
-
-
-def fig_montage(img, thr=0, mode='coronal', rows=5, cloumns=6, fsz=(10, 20)):
+def montage(img, thr=0, mode='coronal', rows=5, cloumns=6, fsz=(10, 20)):
     """
     Make a montage using nilearn for the background
     The output figure will be 5 slices wide and 6
@@ -205,7 +188,9 @@ def fig_montage(img, thr=0, mode='coronal', rows=5, cloumns=6, fsz=(10, 20)):
         # Get the slices in the column direction
         row_range = view_range[row_id*rows:(row_id+1)*rows]
         # Display the thing
-        montage(img, ax, thr=thr, mode=view_mode, view_range=row_range)
+        nlp.plot_stat_map(img, cut_coords=row_range,
+                          display_mode=view_mode, threshold=thr,
+                          axes=ax, black_bg=True)
 
     return fig
 
