@@ -220,8 +220,6 @@ def make_cmap(colors, position=None, bit=False):
     colorbar and the last is the highest.
     position contains values from 0 to 1 to dictate the location of each color.
     """
-    import matplotlib as mpl
-    import numpy as np
     bit_rgb = np.linspace(0,1,256)
     if position:
         position = np.linspace(0,1,len(colors))
