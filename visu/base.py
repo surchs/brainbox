@@ -143,13 +143,36 @@ def make_montage(vol, axis='coronal', x_step=5, y_step=6):
     return out_mat
 
 
-def montage(img, thr=0, axis='coronal', x_step=5, y_step=6, fsz=(10, 20)):
+def montage(img, ax, thr=0, mode='coronal', view_range=[-10, 5, 0, 5, 10]):
+    """
+    Put the montage into a subplot
+    :param img: nilearn image containing the data
+    :param ax: axis handle where the image goes
+    :param thr: threshold for the image
+    :param mode: view mode. saggital, coronal, axial
+    :param view_range: list or array of slice positions
+    :return ax: axis handle
+    """
+    nlp.plot_stat_map(img, cut_coords=view_range,
+                      display_mode=mode, threshold=thr,
+                      axes=ax, black_bg=True)
+
+    return ax
+
+
+def fig_montage(img, thr=0, mode='coronal', rows=5, cloumns=6, fsz=(10, 20)):
     """
     Make a montage using nilearn for the background
     The output figure will be 5 slices wide and 6
     slices deep
 
-    This should deprecate the older function make_montage
+    :param img: nilearn image containing the data
+    :param thr: threshold for the image
+    :param mode: view mode. saggital, coronal, axial
+    :param rows: number of rows in the figure
+    :param cloumns: number of columns in the figure
+    :param fsz: size of the figure
+    :return fig: figure handle for saving or whatnot
     """
     # Hardwired view range
     sag_rng = [-65, 65]
@@ -157,34 +180,33 @@ def montage(img, thr=0, axis='coronal', x_step=5, y_step=6, fsz=(10, 20)):
     axi_rng = [-71, 85]
 
     # Get the number of slices
-    n_slices = x_step * y_step
+    n_slices = rows * cloumns
 
-    if axis == 'coronal':
+    if mode == 'coronal':
         # Get the slice indices
         view_range = np.floor(np.linspace(cor_rng[0], cor_rng[1], n_slices))
         view_mode = 'y'
-    if axis == 'axial':
+    if mode == 'axial':
         # Get the slice indices
         view_range = np.floor(np.linspace(axi_rng[0], axi_rng[1], n_slices))
         view_mode = 'z'
-    if axis == 'saggital':
+    if mode == 'saggital':
         # Get the slice indices
         view_range = np.floor(np.linspace(sag_rng[0], sag_rng[1], n_slices))
         view_mode = 'x'
 
     # Prepare the figure
     fig = plt.figure(figsize=fsz)
-    gs = gridspec.GridSpec(y_step, 1, hspace=0, wspace=0)
+    gs = gridspec.GridSpec(cloumns, 1, hspace=0, wspace=0)
     # Loop through the rows of the image
-    for row_id in range(y_step):
+    for row_id in range(cloumns):
         # Create the axis to show
         ax = fig.add_subplot(gs[row_id, 0])
         # Get the slices in the column direction
-        row_range = view_range[row_id*x_step:(row_id+1)*x_step]
+        row_range = view_range[row_id*rows:(row_id+1)*rows]
         # Display the thing
-        nlp.plot_stat_map(img, cut_coords=row_range,
-                          display_mode=view_mode, threshold=thr,
-                         axes=ax, black_bg=True)
+        montage(img, ax, thr=thr, mode=view_mode, view_range=row_range)
+
     return fig
 
 
