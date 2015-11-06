@@ -1,5 +1,5 @@
 __author__ = 'surchs'
-import load
-import comp
-import tools
-import visu
+from . import load
+from . import comp
+from . import tools
+from . import visu
