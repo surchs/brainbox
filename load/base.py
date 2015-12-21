@@ -2,12 +2,16 @@ __author__ = 'Sebastian Urchs'
 # Imports
 import os
 import re
+import sys
 import glob
 import copy
 import numpy as np
 import nibabel as nib
 from .. import tools as to
-from  __builtin__ import any as b_any
+if sys.version_info >= (3, 0):
+    from builtins import any as b_any
+else:
+    from  __builtin__ import any as b_any
 
 
 def grab_files(path, ext, sub=None, duplicates=True, match=None):
